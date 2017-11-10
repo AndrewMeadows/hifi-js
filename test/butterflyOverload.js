@@ -91,23 +91,21 @@ var butterflyIndex = 0;
 function updateButterflies(deltaTime) {  
     // update one butterfly at a time
     butterflyIndex = (butterflyIndex + 1) % numButterflies;
-    var CHANCE_OF_IMPULSE = 0.04;
 
-    if (Math.random() < CHANCE_OF_IMPULSE) {
-        var properties = Entities.getEntityProperties(butterflies[butterflyIndex]);
-        if (Vec3.length(Vec3.subtract(properties.position, flockPosition)) > range) {
-            Entities.editEntity(butterflies[butterflyIndex], { position: flockPosition } );
-        } else if (properties.velocity.y <= 0.0) {
-            //  If falling, Create a new direction and impulse
-            var HORIZ_SCALE = 0.50;
-            var VERT_SCALE = 0.50;
-            var newHeading = Math.random() * 360.0;  
-            var newVelocity = Vec3.multiply(HORIZ_SCALE, Quat.getForward(Quat.fromPitchYawRollDegrees(0.0, newHeading, 0.0))); 
-            newVelocity.y = (Math.random() + 0.5) * VERT_SCALE;
-            Entities.editEntity(butterflies[butterflyIndex], { rotation: Quat.fromPitchYawRollDegrees(-80 + Math.random() * 20, newHeading, (Math.random() - 0.5) * 10), 
-                                            velocity: newVelocity } );
-        }
-        }
+    var properties = Entities.getEntityProperties(butterflies[butterflyIndex]);
+    if (Vec3.length(Vec3.subtract(properties.position, flockPosition)) > range) {
+        Entities.editEntity(butterflies[butterflyIndex], { position: flockPosition } );
+    } else if (properties.velocity.y <= 0.0) {
+        //  If falling, Create a new direction and impulse
+        var HORIZ_SCALE = 0.50;
+        var VERT_SCALE = 0.50;
+        var newHeading = Math.random() * 360.0;  
+        var newVelocity = Vec3.multiply(HORIZ_SCALE, Quat.getForward(Quat.fromPitchYawRollDegrees(0.0, newHeading, 0.0))); 
+        newVelocity.y = (Math.random() + 0.5) * VERT_SCALE;
+        Entities.editEntity(butterflies[butterflyIndex], { rotation: Quat.fromPitchYawRollDegrees(-80 + Math.random() * 20, newHeading, (Math.random() - 0.5) * 10), 
+        velocity: newVelocity } );
+    }
+
     // Check to see if we've been running long enough that our butterflies are dead
     var nowTimeInSeconds = new Date().getTime() / 1000;
     if ((nowTimeInSeconds - startTimeInSeconds) >= lifeTime) {
