@@ -1,6 +1,7 @@
 // computePi.js -- torture: needlessly crunch numbers on update
 
 (function() {
+    print("adebug computePi.js");
     var computeCount = 0;
     function computePi(computeTime) {
         // This infinite series computes PI, but it converges slowly.
