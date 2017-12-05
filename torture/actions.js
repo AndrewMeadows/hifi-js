@@ -49,7 +49,7 @@ createObjects();
 
 //  Delete our little friends if script is stopped
 Script.scriptEnding.connect(function() {
-    for (var i = 0; i < NUM_OBJECTS; i++) {
+    for (var i = 0; i < NUM_ACTIONS; i++) {
         Entities.deleteEntity(objects[i]);
     }
 });
