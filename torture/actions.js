@@ -38,7 +38,8 @@ function createObjects() {
                 Entities.addAction("tractor", objectID, {
                     targetRotation: rotation,
                     targetPosition: position,
-                    angularTimeScale: 0.5,
+                    angularTimeScale: 1.0,
+                    linearTimeScale: 1.0,
                     tag: "tractor"
                 });
             }
@@ -46,6 +47,23 @@ function createObjects() {
     }
 }
 createObjects();
+
+/* uncomment this to keep boxes "active" in Bullet simulation
+function pokeObjects() {
+    for (var i = 0; i < NUM_OBJECTS_PER_SIDE + 1; i++) {
+        for (var j = 0; j < NUM_OBJECTS_PER_SIDE; j++) {
+            var k = i * NUM_OBJECTS_PER_SIDE + j;
+            if (k < NUM_ACTIONS) {
+                var properties = {
+                    velocity: { x: 0.05, y: 0.05, z: 0.05 };
+                };
+                var objectID = Entities.editEntity(objects[k], properties);
+            }
+        }
+    }
+}
+Script.update.connect(pokeObjects);
+*/
 
 //  Delete our little friends if script is stopped
 Script.scriptEnding.connect(function() {
