@@ -34,7 +34,7 @@
     this.clickDownOnEntity = function (entityID, mouseEvent) {
         if (entityID === this.entityID) {
             if (mouseEvent.isLeftButton) {
-                push(entityID);
+                push();
             }
         }
     };
