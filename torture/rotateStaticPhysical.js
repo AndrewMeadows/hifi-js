@@ -1,4 +1,7 @@
-// rotateStaticEntities.js -- torture: change rotation of many boxes AFAP
+// rotateStaticPhysical.js -- torture: change rotation of many static boxes AFAP
+
+//Window.location = "hifi://localhost/0,0,0/0,0,0,1";
+Window.location = "leviathan/0,0,0/0,0,0,1"
 
 var NUM_OBJECTS = 1000;
 var NUM_OBJECTS_PER_SIDE = Math.floor(Math.sqrt(NUM_OBJECTS));
@@ -68,3 +71,30 @@ Script.scriptEnding.connect(function() {
         Entities.deleteEntity(objects[i]);
     }
 });
+
+// prepare for trace
+var startTime = 20;
+var dumpTime = startTime - 1;
+var endTime = startTime + 5;
+var outputFile = "/tmp/trace-detailed-rotateStaticPhysical.json.gz";
+var dumpFile = "/tmp/stats-detailed-rotateStaticPhysical.txt";
+
+Script.setTimeout(function() {
+    var loggingRules = "" +
+        "trace.*=false\n" +
+        //"trace.render.debug=true\n" +
+        //"trace.app.debug=true\n" +
+        "trace.simulation.*=true\n"
+        "";
+    Test.startTracing(loggingRules);
+}, startTime * 1000);
+
+Script.setTimeout(function() {
+    Test.savePhysicsSimulationStats(dumpFile);
+}, dumpTime * 1000);
+
+Script.setTimeout(function() {
+    Test.stopTracing(outputFile);
+    Test.quit();
+    Script.stop();
+}, endTime * 1000);

@@ -1,4 +1,7 @@
-// animation.js -- torture script: many animating entities with 90 sec lifetime
+// animateNonPhysical.js -- torture script: many animating entities with 90 sec lifetime
+
+//Window.location = "hifi://localhost/0,0,0/0,0,0,1";
+Window.location = "leviathan/0,0,0/0,0,0,1";
 
 var NUM_OBJECTS = 1000;
 
@@ -7,7 +10,7 @@ var LIFE_SPAN = 90; // seconds
 
 var FLOCK_RADIUS = 4.0;
 var FLOCK_UP_OFFSET = FLOCK_RADIUS;
-var FLOCK_FORWARD_OFFSET = 1.5 * FLOCK_RADIUS;
+var FLOCK_FORWARD_OFFSET = 3.5 * FLOCK_RADIUS;
 var FLOCK_LOCAL_OFFSET = { x: 0, y: FLOCK_UP_OFFSET, z: -FLOCK_FORWARD_OFFSET };
 var flockCenter = Vec3.sum(MyAvatar.position, Vec3.multiplyQbyV(MyAvatar.orientation, FLOCK_LOCAL_OFFSET));
 
@@ -63,3 +66,30 @@ Script.scriptEnding.connect(function() {
         Entities.deleteEntity(objects[i]);
     }
 });
+
+// prepare for trace
+var startTime = 20;
+var dumpTime = startTime - 1;
+var endTime = startTime + 5;
+var outputFile = "/tmp/trace-detailed-animateNonPhysical.json.gz";
+var dumpFile = "/tmp/stats-detailed-animateNonPhysical.txt";
+
+Script.setTimeout(function() {
+    var loggingRules = "" +
+        "trace.*=false\n" +
+        //"trace.render.debug=true\n" +
+        //"trace.app.debug=true\n" +
+        "trace.simulation.*=true\n"
+        "";
+    Test.startTracing(loggingRules);
+}, startTime * 1000);
+
+Script.setTimeout(function() {
+    Test.savePhysicsSimulationStats(dumpFile);
+}, dumpTime * 1000);
+    
+Script.setTimeout(function() {
+    Test.stopTracing(outputFile);
+    Test.quit();
+    Script.stop();
+}, endTime * 1000);

@@ -1,4 +1,4 @@
-// memory.js -- torture script: leak a specified amount of JS memory
+// leakMemoryResources.js -- torture script: leak a specified amount of JS memory
 
 var mbToLeak = 1000;
 var mbPerLeak = 1.97; // emperically determined for linux release build

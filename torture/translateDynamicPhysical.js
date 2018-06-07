@@ -1,4 +1,7 @@
-// kinematicPhysicalMovement.js -- torture script: many moving kinematic physical entities with 90 sec lifetime
+// translateDynamicPhysical.js -- torture script: many translating dynamic physical entities with 90 sec lifetime
+
+//Window.location = "hifi://localhost/0,0,0/0,0,0,1";
+Window.location = "leviathan/0,0,0/0,0,0,1"
 
 var NUM_OBJECTS = 1000;
 
@@ -11,7 +14,7 @@ var FLOCK_UP_OFFSET = FLOCK_RADIUS + AVATAR_HEIGHT;
 var FLOCK_FORWARD_OFFSET = 2.0 * FLOCK_RADIUS + 4.0;
 var FLOCK_LOCAL_OFFSET = { x: 0, y: FLOCK_UP_OFFSET, z: -FLOCK_FORWARD_OFFSET };
 var flockCenter = Vec3.sum(MyAvatar.position, Vec3.multiplyQbyV(MyAvatar.orientation, FLOCK_LOCAL_OFFSET));
-var FLOCK_LOCAL_VELOCITY = { x: 0, y: 0.5, z: 0.0 };
+var FLOCK_LOCAL_VELOCITY = { x: 0, y: 0.2, z: 0.0 };
 var flockVelocity = Vec3.multiplyQbyV(MyAvatar.orientation, FLOCK_LOCAL_VELOCITY);
 
 function randomPosition() {
@@ -30,12 +33,12 @@ function createObjects() {
         var localPosition = { x: rezRadius * Math.sin(rezPhase), y: 0.0, z: rezRadius * Math.cos(rezPhase) };
         var worldPosition = Vec3.sum(flockCenter, Vec3.multiplyQbyV(MyAvatar.orientation, localPosition));
         var properties = {
-            type: "Box",
-            dynamic: false,
+            type: "Sphere",
+            dynamic: true,
             lifetime: LIFE_SPAN,
             position: worldPosition,
             rotation: { x: 0, y: 0, z: 0, w: 1 },
-            angularVelocity: flockVelocity,
+            velocity: flockVelocity,
             gravity: { x: 0, y: 0, z: 0 },
             damping: 0.0,
             angularDamping: 0.0,
@@ -57,3 +60,30 @@ Script.scriptEnding.connect(function() {
         Entities.deleteEntity(objects[i]);
     }
 });
+
+// prepare for trace
+var startTime = 20;
+var dumpTime = startTime - 1;
+var endTime = startTime + 5;
+var outputFile = "/tmp/trace-detailed-translateDynamicPhysical.json.gz";
+var dumpFile = "/tmp/stats-detailed-translateDynamicPhysical.txt";
+
+Script.setTimeout(function() {
+    var loggingRules = "" +
+        "trace.*=false\n" +
+        //"trace.render.debug=true\n" +
+        //"trace.app.debug=true\n" +
+        "trace.simulation.*=true\n"
+        "";
+    Test.startTracing(loggingRules);
+}, startTime * 1000);
+
+Script.setTimeout(function() {
+    Test.savePhysicsSimulationStats(dumpFile);
+}, dumpTime * 1000);
+
+Script.setTimeout(function() {
+    Test.stopTracing(outputFile);
+    Test.quit();
+    Script.stop();
+}, endTime * 1000);

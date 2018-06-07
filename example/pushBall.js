@@ -22,7 +22,6 @@
             userData: "{\"grabbableKey\": { \"wantsTrigger\": true, \"grabbable\": false  }}"
         })
     }
-
     this.push = function() {
         // figure out which way is "up" in a future-proof way
         var localUp = { x: 0, y: 1, z: 0 };
@@ -53,7 +52,6 @@
         var newVelocity = Vec3.sum(boostVelocity, entityProps.velocity);
         Entities.editEntity(this.entityID, {velocity: newVelocity});
     }
-
     this.startFarTrigger = function (entityID) {
         if (entityID === this.entityID) {
             this.push();
@@ -64,7 +62,6 @@
             this.push();
         }
     };
-
     this.clickDownOnEntity = function (entityID, mouseEvent) {
         if (entityID === this.entityID) {
             if (mouseEvent.isLeftButton) {

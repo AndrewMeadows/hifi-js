@@ -1,4 +1,4 @@
-// colorCycle.js -- torture: change nonPhysical property (color) of many entities AFAP
+// cycleColor.js -- torture: change nonPhysical property (color) of many entities AFAP
 
 var NUM_OBJECTS = 1000;
 
