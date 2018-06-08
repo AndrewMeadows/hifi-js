@@ -69,6 +69,7 @@ var SUN_MASS = 20.0 * PLANET_MASS;
 var maxOrbitSpeed = 1.0;
 var G = FIRST_ORBIT_OFFSET * maxOrbitSpeed * maxOrbitSpeed / (PLANET_MASS + SUN_MASS);
 
+var light = 1;
 var bodies = [];
 function createSun() {
     var sunDimensions = { x: SUN_DIAMETER, y: SUN_DIAMETER, z: SUN_DIAMETER };
@@ -86,6 +87,18 @@ function createSun() {
         density: SUN_DENSITY,
         lifetime: LIFETIME
     }));
+    light = Entities.addEntity({
+        type: "Light",
+        name: "SunLight",
+        color: WHITE,
+        dimensions: { x: 2 * SYSTEM_RADIUS, y: 2 * SYSTEM_RADIUS, z: 2 * SYSTEM_RADIUS },
+        position: SUN_POSITION,
+        //isSpotlight: false,
+        //exponent: 0,
+        intensity: 10.0,
+        falloffRadius: 10 * SUN_DIAMETER,
+        lifetime: LIFETIME
+    });
 }
 createSun();
 
@@ -174,5 +187,6 @@ Script.scriptEnding.connect(function scriptEnding() {
     for (var i = 0; i < bodies.length; i++) {
         Entities.deleteEntity(bodies[i]);
     }
+    Entities.deleteEntity(light);
     bodies = [];
 });
